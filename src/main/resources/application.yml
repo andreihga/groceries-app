@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  flyway:
+    enabled: true
+    schemas:
+      - groceries_app
+
+  jpa:
+    database: POSTGRESQL
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        default_schema: groceries_app
+  datasource:
+    url: jdbc:postgresql://localhost:5432/groceries_app
+    username: ahogeagapp
+    password: ahogeagapp
+    driverClassName: org.postgresql.Driver
+  sql:
+    init:
+      platform: postgres

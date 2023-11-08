@@ -1,0 +1,11 @@
+package com.home.projects.groceriesapp.api.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/api/v1/shopping-list")
+public class ShoppingListController {
+
+
+}
