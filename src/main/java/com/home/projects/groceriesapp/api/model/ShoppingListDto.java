@@ -1,6 +1,5 @@
 package com.home.projects.groceriesapp.api.model;
 
-import com.home.projects.groceriesapp.data.model.Grocery;
 import com.home.projects.groceriesapp.data.model.ShoppingListItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,11 +16,9 @@ import java.util.UUID;
 @Builder
 public class ShoppingListDto {
 
-    UUID id;
-
     String name;
 
     Date creationDate;
 
-    List<ShoppingListItem> groceries;
+    List<ShoppingListItemDto> groceries;
 }

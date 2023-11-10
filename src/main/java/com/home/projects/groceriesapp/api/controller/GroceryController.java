@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -23,17 +24,16 @@ public class GroceryController {
     }
 
     @PostMapping
-    public String saveGrocery(@RequestBody GroceryRequest request, Model model) {
+    public ModelAndView saveGrocery(@RequestBody GroceryRequest request, Model model) {
         var grocery = groceryService.saveGrocery(request);
         model.addAttribute("grocery", grocery);
-        model.addAttribute("groceries", List.of());
-        return "test";
+        return new ModelAndView("index");
     }
 
     @GetMapping
     public String getGroceries(Model model) {
         List<GroceryDto> groceries = groceryService.getGroceries();
         model.addAttribute("groceries", groceries);
-        return "test";
+        return "index";
     }
 }

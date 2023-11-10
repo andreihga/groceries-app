@@ -31,7 +31,7 @@ public class ShoppingListItem {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     UUID id;
 
-    @OneToOne
+    @ManyToOne
     Grocery grocery;
 
     Integer quantity;

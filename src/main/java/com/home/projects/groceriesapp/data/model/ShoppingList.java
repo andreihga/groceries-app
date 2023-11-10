@@ -1,8 +1,12 @@
 package com.home.projects.groceriesapp.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -17,7 +21,7 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name = "shopping_list", schema = "groceries_app")
+@Table(name = "shopping_list", schema = "groceries_app", indexes = @Index(name = "idx_active", columnList = "active"))
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -32,6 +36,9 @@ public class ShoppingList {
 
     Date creationDate;
 
-    @OneToMany
+    Boolean active;
+
+    @OneToMany(cascade= CascadeType.ALL)
+    @JsonIgnore
     List<ShoppingListItem> groceries;
 }
