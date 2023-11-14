@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groceries App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .menu {
+            background-color: #f0f0f0;
+            padding: 10px;
+        }
+
+        .menu button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            text-align: left;
+            border: none;
+            background: none;
+            outline: none;
+            margin-bottom: 5px;
+        }
+
+        .menu button:hover {
+            background-color: #ddd;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+
+        .menu button {
+            display: block;
+            width: 80%; /* Adjust width as needed */
+            padding: 10px 20px; /* Increased padding for better touch targets */
+            margin-bottom: 10px; /* Space between buttons */
+            background-color: #4CAF50; /* Button color */
+            color: white;
+            border: none;
+            border-radius: 5px; /* Rounded corners */
+            font-size: 16px; /* Larger text */
+            text-align: center;
+            outline: none;
+            transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover and active states */
+        }
+
+        .menu button:hover, .menu button:active {
+            background-color: #367c39; /* Darker shade on hover/active */
+            transform: translateY(2px); /* Slight move down on active */
+        }
+
+
+        .content {
+            padding: 20px;
+        }
+
+        .add-grocery-form {
+            display: none;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .button-link {
+            display: block;
+            width: 80%; /* Adjust width as needed */
+            padding: 10px 20px; /* Increased padding for better touch targets */
+            margin-bottom: 10px; /* Space between buttons */
+            background-color: #4CAF50; /* Button color */
+            color: white;
+            border: none;
+            border-radius: 5px; /* Rounded corners */
+            font-size: 16px; /* Larger text */
+            text-align: center;
+            text-decoration: none; /* Remove underline from link */
+            /* Add other button styles as needed */
+        }
+
+        #addGroceryForm {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 400px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #addGroceryForm label,
+        #addGroceryForm input,
+        #addGroceryForm button {
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        #addGroceryForm input,
+        #addGroceryForm button {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #addGroceryForm button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #addGroceryForm button:hover {
+            background-color: #367C39;
+        }
+
+        .groceries-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .groceries-list li {
+            background-color: #f8f8f8;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .groceries-list span {
+            margin-right: 10px;
+        }
+
+        .add-quantity, .submit-quantity {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .quantity-input {
+            margin-right: 10px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .add-quantity {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 8px;
+            border-radius: 50%; /* Circular shape */
+            font-size: 16px;
+            line-height: 1;
+            cursor: pointer;
+            border: none;
+        }
+
+        .quantity-input {
+            flex-grow: 1; /* Takes available space */
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        .quantity-input::placeholder {
+            color: #888; /* Gray color for the placeholder text */
+            /* Add other styles as needed (e.g., font-size, font-style) */
+        }
+
+        .shopping-list {
+            max-width: 600px; /* Adjust as needed */
+            margin: 20px auto; /* Centers the list */
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial', sans-serif; /* Choose a font that suits your app */
+        }
+
+        .shopping-list h2 {
+            text-align: center;
+            color: #4CAF50; /* A pleasant green, adjust as needed */
+            margin-bottom: 20px;
+            font-size: 24px; /* Larger font size for the title */
+        }
+
+        .shopping-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .shopping-list li {
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #ddd; /* Subtle separator instead of boxes */
+        }
+
+        .shopping-list span {
+            color: #555; /* A darker gray for better readability */
+            font-size: 18px; /* Slightly larger font size for grocery items */
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Welcome to my Groceries App</h1>
+</div>
+<div class="menu">
+    <button onclick="showAddGroceryForm()">Add Grocery</button>
+    <button onclick="showGroceriesList()" class="button-link">Show Groceries</button>
+    <button onclick="showShoppingList()">Shopping List</button>
+</div>
+<div class="add-grocery-form" id="addGroceryForm">
+    <form id="groceryForm" action="/api/v1/grocery" method="post">
+        <label for="name">Grocery Name:</label>
+        <input type="text" id="name" name="name" required>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+<div class="groceries-list" id="groceriesList">
+    <ul>
+        <li th:each="grocery : ${groceries}">
+            <span th:text="${grocery.name}"></span>
+            <span class="add-quantity" th:data-grocery-id="${grocery.id}" onclick="showQuantityBox(this)">+</span>
+            <!-- Add placeholder attribute to the input element -->
+            <input type="number" class="quantity-input" placeholder="Quantity" style="display:none;"/>
+            <button class="submit-quantity" style="display:none;">Add</button>
+        </li>
+    </ul>
+</div>
+
+<div th:if="${shoppingList}" class="shopping-list">
+    <h2 th:text="${shoppingList.name}"></h2>
+    <ul>
+        <li th:each="grocery : ${shoppingList.groceries}">
+            <span th:text="${grocery.name}"></span>
+            <span th:text="${grocery.quantity}"></span>
+        </li>
+    </ul>
+</div>
+
+<div class="content">
+    <!-- Dynamic content goes here -->
+</div>
+
+<script>
+    function showShoppingList() {
+        document.getElementById('addGroceryForm').style.display = 'none';
+        window.location.href = '/api/v1/shopping-list';
+    }
+
+    function showGroceriesList() {
+        // Hide the add grocery form and the shopping list
+        document.getElementById('addGroceryForm').style.display = 'none';
+        var shoppingListDiv = document.querySelector('.shopping-list');
+        if (shoppingListDiv) {
+            shoppingListDiv.style.display = 'none';
+        }
+
+        // Navigate to the groceries endpoint
+        window.location.href = '/api/v1/grocery';
+    }
+
+
+    document.getElementById('groceryForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        var groceryName = document.getElementById('name').value;
+
+        fetch('/api/v1/grocery', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({name: groceryName}),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                // Handle success
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // Handle errors
+            });
+    });
+
+    function showAddGroceryForm() {
+        document.getElementById('addGroceryForm').style.display = 'block';
+
+        // Hide the groceries list
+        document.getElementById('groceriesList').style.display = 'none';
+
+        // Hide the shopping list, if it's visible
+        var shoppingListDiv = document.querySelector('.shopping-list');
+        if (shoppingListDiv) {
+            shoppingListDiv.style.display = 'none';
+        }
+    }
+
+
+    function showQuantityBox(clickedElement) {
+        // Close and reset all other quantity inputs and "+" symbols
+        document.querySelectorAll('.groceries-list li').forEach(function (listItem) {
+            const plusSymbol = listItem.querySelector('.add-quantity');
+            const quantityInput = listItem.querySelector('.quantity-input');
+            const addButton = listItem.querySelector('.submit-quantity');
+
+            plusSymbol.style.display = 'inline'; // Show the "+" symbol
+            quantityInput.style.display = 'none'; // Hide the quantity input
+            addButton.style.display = 'none'; // Hide the "Add" button
+            quantityInput.value = ''; // Reset the value of the input
+        });
+
+        // Reset the unsaved changes flag
+        unsavedChanges = false;
+
+        // Now show the quantity input and "Add" button for the clicked element
+        clickedElement.style.display = 'none'; // Hide the clicked "+" symbol
+        const quantityInput = clickedElement.nextElementSibling;
+        const addButton = quantityInput.nextElementSibling;
+        quantityInput.style.display = 'block';
+        addButton.style.display = 'block';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Attach event listeners to '+' buttons
+        const addQuantityButtons = document.querySelectorAll('.add-quantity');
+        addQuantityButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                showQuantityBox(this);
+            });
+        });
+
+        // Attach event listeners to 'Add' buttons
+        const submitQuantityButtons = document.querySelectorAll('.submit-quantity');
+        submitQuantityButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                addToShoppingList(this); // 'this' refers to the button
+            });
+        });
+
+        // Attach change event listeners to quantity input fields
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+        quantityInputs.forEach(function (input) {
+            input.addEventListener('input', function () {
+                unsavedChanges = true;
+            });
+        });
+    });
+
+
+    function addToShoppingList(buttonElement) {
+
+        console.log("Button Element:", buttonElement); // Debugging line
+
+        const listItem = buttonElement.closest('li');
+        if (!listItem) {
+            console.error("List item not found");
+            return;
+        }
+
+        const quantityInput = listItem.querySelector('.quantity-input');
+        if (!quantityInput) {
+            console.error("Quantity input not found");
+            return;
+        }
+
+        const quantity = quantityInput.value;
+        const plusSymbol = listItem.querySelector('.add-quantity');
+        const groceryId = plusSymbol.getAttribute('data-grocery-id');
+
+        fetch('/api/v1/shopping-list', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({groceryId: groceryId, quantity: parseInt(quantity, 10)}),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                unsavedChanges = false;
+
+                // Reset the UI to its initial state
+                quantityInput.style.display = 'none';
+                buttonElement.style.display = 'none';
+                plusSymbol.style.display = 'inline';
+                quantityInput.value = ''; // Clear the input field
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Failed to add item to shopping list.');
+
+                // Reset the UI even in case of error
+                quantityInput.style.display = 'none';
+                buttonElement.style.display = 'none';
+                plusSymbol.style.display = 'inline';
+            });
+    }
+
+    let unsavedChanges = false;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Existing code for attaching event listeners...
+
+        // Attach change event listeners to quantity input fields
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+        quantityInputs.forEach(function (input) {
+            input.addEventListener('input', function () {
+                unsavedChanges = true;
+            });
+        });
+    });
+
+    window.addEventListener('beforeunload', function (e) {
+        if (unsavedChanges) {
+            // Cancel the event
+            e.preventDefault();
+            // Chrome requires returnValue to be set
+            e.returnValue = 'You have unsaved changes. Are you sure you want to quit?';
+        }
+    });
+
+
+</script>
+</body>
+</html>
